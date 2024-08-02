@@ -2,13 +2,13 @@
 
 ## About
 AWS makes various log files available for their services (eg: ALB access log, cloudfront access log,
-s3 access log etc). It is possible to use athena to query these files. But often there may be some
-overhead in setting up athena and there are cases where you have access to few of these files, and 
-you wanna analyze them.
+s3 access log etc). It is possible to use athena to query these files. But there is some 
+overhead in setting up athena and there are cases where you may have these files locally, and 
+you wanna analyze them quickly.
 
-That is where this sql comes in handy, [duckdb](https://duckdb.org/) is a very popular analytical
-database that can be run locally over csv, parquet, tsv etc among other file formats. This repo
-contains SQL statements that can be use to analyze aws log files using SQL locally.
+[duckdb](https://duckdb.org/) is a very popular analytical database that can be run locally over
+csv, parquet, tsv etc among other file formats. This repo contains SQL statements that can be used 
+to analyze aws log files using SQL locally.
 
 ## Supported Log files
  - [Amazon S3 server access log](https://docs.aws.amazon.com/AmazonS3/latest/userguide/LogFormat.html)
