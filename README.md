@@ -1,38 +1,50 @@
 # aws-logs-duckdb
 
-Install duckdb
-https://duckdb.org/docs/installation/
+## About
+AWS makes various log files available for their services (eg: ALB access log, cloudfront access log,
+s3 access log etc). It is possible to use athena to query these files. But often there may be some
+overhead in setting up athena and there are cases where you have access to few of these files, and 
+you wanna analyze them.
+
+That is where this sql comes in handy, [duckdb](https://duckdb.org/) is a very popular analytical
+database that can be run locally over csv, parquet, tsv etc among other file formats. This repo
+contains SQL statements that can be use to analyze aws log files using SQL locally.
+
+## Supported Log files
+ - [Amazon S3 server access log](https://docs.aws.amazon.com/AmazonS3/latest/userguide/LogFormat.html)
+ - [Amazon ALB access log](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html)
+ - [Amazon cloudfront access log](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html)
+
+
+## How to use
+1. Install [duckdb](https://duckdb.org/docs/installation/)
+```bash
+brew install duckdb
+```
+
+2. 
 
 ```
-$ ls logs/
-E3CAFWEWER.2024-08-01-23.00058224.gz
-
-$ cd logs/
+$ cd samples/s3_access_log/
 
 $ duckdb
-.read 'cloudfront_access_log.sql'
+.read ../../s3_access_log.sql
 
-D select sc_status, count(*) as cnt from access_logs group by 1 order by 1 desc;
-┌───────────┬────────┐
-│ sc_status │  cnt   │
-│   int32   │ int64  │
-├───────────┼────────┤
-│       502 │    601 │
-│       429 │     12 │
-│       422 │      7 │
-│       408 │      5 │
-│       404 │     40 │
-│       403 │     75 │
-│       401 │    146 │
-│       400 │    150 │
-│       304 │    439 │
-│       302 │      1 │
-│       204 │      1 │
-│       202 │    108 │
-│       201 │     41 │
-│       200 │ 102600 │
-│         0 │    687 │
-├───────────┴────────┤
-│ 15 rows  2 columns │
-└────────────────────┘
+select uri_stem, bucket, http_method, http_status  from s3_access_log;
 ```
+|            uri_stem             |       bucket        | http_method | http_status |
+|---------------------------------|---------------------|-------------|------------:|
+| /DOC-EXAMPLE-BUCKET1?versioning | DOC-EXAMPLE-BUCKET1 | GET         | 200         |
+| /DOC-EXAMPLE-BUCKET1?logging    | DOC-EXAMPLE-BUCKET1 | GET         | 200         |
+| /DOC-EXAMPLE-BUCKET1?policy     | DOC-EXAMPLE-BUCKET1 | GET         | 404         |
+| /DOC-EXAMPLE-BUCKET1?versioning | DOC-EXAMPLE-BUCKET1 | GET         | 200         |
+| /DOC-EXAMPLE-BUCKET1/s3-dg.pdf  | DOC-EXAMPLE-BUCKET1 | PUT         | 200         |
+
+```sql
+ select bucket, http_status, count(*) as cnt from s3_access_log group by 1,2;
+```
+
+|       bucket        | http_status | cnt |
+|---------------------|------------:|----:|
+| DOC-EXAMPLE-BUCKET1 | 200         | 4   |
+| DOC-EXAMPLE-BUCKET1 | 404         | 1   |
