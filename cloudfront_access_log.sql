@@ -1,6 +1,7 @@
 CREATE OR REPLACE TABLE cf_access_logs AS
 SELECT *
 FROM read_csv(
+        -- path to files, currently it loads all files in local dir, you may want to change this
         '*',
         delim = '\t',
         nullstr = '-',
