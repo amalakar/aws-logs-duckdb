@@ -1,7 +1,7 @@
-CREATE OR REPLACE TABLE access_logs AS
+CREATE OR REPLACE TABLE cf_access_logs AS
 SELECT *
 FROM read_csv(
-        '*.gz',
+        '*',
         delim = '\t',
         nullstr = '-',
         header = false,
