@@ -29,7 +29,7 @@ brew install duckdb
 $ cd samples/s3_access_log/
 
 $ duckdb
-.read ../../s3_access_log.sql
+.read ../../sql/s3_access_log.sql
 
 select uri_stem, bucket, http_method, http_status  from s3_access_log;
 ```
