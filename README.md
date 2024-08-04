@@ -15,6 +15,7 @@ to analyze aws log files using SQL locally.
  - [Amazon ALB access log](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-access-logs.html)
  - [Amazon cloudfront access log](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html)
  - [Elastic Load Balancer classic](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/access-log-collection.html)
+ - [Network Load Balancer](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-access-logs.html)
 
 
 ## How to use
